@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modo Oscuro</title>
+    <!-- Importar la fuente Montserrat Regular 400 de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #333;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+        }
+        .editor-container {
+            display: flex;
+            width: 100%;
+            height: 90%;
+            margin-top: 15px;
+            box-sizing: border-box;
+        }
+        .line-numbers {
+            background-color: #444;
+            padding: 10px;
+            text-align: right;
+            user-select: none;
+            color: #888;
+            line-height: 1.8; /* Aumenta el espacio vertical */
+        }
+        textarea {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background-color: #555;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            line-height: 1.8; /* Aumenta el espacio vertical */
+            resize: none;
+        }
+        .button-container {
+            position: fixed;
+            top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        button {
+            width: 100px;
+            height: 40px;
+            font-size: 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #d37800;
+            color: white;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+        }
+        button:hover {
+            background-color: #a06500;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button id="emojiButton">Ejecutar</button>
+    </div>
+    <div class="editor-container">
+        <div class="line-numbers" id="lineNumbers"></div>
+        <textarea spellcheck="false" id="textArea" oninput="updateLineNumbers()" onscroll="syncScroll()"></textarea>
+    </div>
+
+    <script>
+        function updateLineNumbers() {
+            const textArea = document.getElementById('textArea');
+            const lineNumbers = document.getElementById('lineNumbers');
+            const lines = textArea.value.split('\n').length;
+            lineNumbers.innerHTML = '';
+            for (let i = 1; i <= lines; i++) {
+                lineNumbers.innerHTML += i + '<br>';
+            }
+        }
+
+        function syncScroll() {
+            const textArea = document.getElementById('textArea');
+            const lineNumbers = document.getElementById('lineNumbers');
+            lineNumbers.scrollTop = textArea.scrollTop;
+        }
+
+        document.getElementById('emojiButton').addEventListener('click', () => {
+            const textAreaContent = document.getElementById('textArea').value.replace(/\n/g, 'ç');
+            const encodedContent = encodeURIComponent(textAreaContent);
+            const url = `https://snapextensions.uni-goettingen.de/handleTextfile.php?type=write&content=${encodedContent}&filename=./textfiles/codenoodle`;
+            
+            // Hacer la solicitud GET
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                    } else {
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Inicializar los números de línea
+        updateLineNumbers();
+    </script>
+</body>
+</html>
